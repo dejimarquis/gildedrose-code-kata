@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GildedRose.Console
 {
@@ -115,9 +116,15 @@ namespace GildedRose.Console
                         }
                     }
                 }
-            }
+
+                QualityCanNotBeMoreThan50(i);
+            }  
         }
 
+        private void QualityCanNotBeMoreThan50(int i)
+        {
+            Items[i].Quality = Math.Min(Items[i].Quality, 50);
+        }
     }
 
     public class Item

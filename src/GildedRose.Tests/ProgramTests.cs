@@ -43,7 +43,7 @@ namespace GildedRose.Tests
 
         [Test]
         [TestCase("Aged Brie",1)]
-        [TestCase("Sulfuras, Hand of Ragnaros", 80)]
+        [TestCase("Sulfuras, Hand of Ragnaros", 50)]
         [TestCase("+5 Dexterity Vest", 19)]
         [TestCase("Elixir of the Mongoose", 6)]
         [TestCase("Backstage passes to a TAFKAL80ETC concert", 21)]
