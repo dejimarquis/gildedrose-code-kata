@@ -51,93 +51,88 @@ namespace GildedRose.Console
             UpdatedItems = app.Items;
         }
 
-        public void UpdateQuality()
+        private void UpdateQuality()
         {
-            for (var i = 0; i < Items.Count; i++)
+            foreach (var item in Items)
             {
-                if (Items[i].Name != "Aged Brie" && Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                {
-                    if (Items[i].Quality > 0)
-                    {
-                        if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                        {
-                            Items[i].Quality = Items[i].Quality - 1;
-                        }
-                    }
-                }
-                else
-                {
-                    if (Items[i].Quality < 50)
-                    {
-                        Items[i].Quality = Items[i].Quality + 1;
-
-                        if (Items[i].Name == "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].SellIn < 11)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
-
-                            if (Items[i].SellIn < 6)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                {
-                    Items[i].SellIn = Items[i].SellIn - 1;
-                }
-
-                if (Items[i].SellIn < 0)
-                {
-                    if (Items[i].Name != "Aged Brie")
-                    {
-                        if (Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].Quality > 0)
-                            {
-                                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                                {
-                                    Items[i].Quality = Items[i].Quality - 1;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Items[i].Quality = Items[i].Quality - Items[i].Quality;
-                        }
-                    }
-                    else
-                    {
-                        if (Items[i].Quality < 50)
-                        {
-                            Items[i].Quality = Items[i].Quality + 1;
-                        }
-                    }
-                }
-
-                QualityCanNotBeMoreThan50(i);
-                QualityCanNotBeLessThanZero(i);
-            }  
+                UpdateItem(item);
+            }
         }
 
-        private void QualityCanNotBeLessThanZero(int i)
+        private void UpdateItem(Item item)
         {
-            Items[i].Quality = Math.Max(Items[i].Quality, 0);
+            UpdateQuality(item);
+            UpdateSellIn(item);
         }
 
-        private void QualityCanNotBeMoreThan50(int i)
+        private void UpdateQuality(Item item)
         {
-            Items[i].Quality = Math.Min(Items[i].Quality, 50);
+            var qualityModifier = GetQualityModifier(item);
+            item.Quality += qualityModifier;
+
+            if (item.IsBackstagePass() && item.IsSellByDatePassed())
+                item.Quality = 0;
+
+            QualityCanNotBeMoreThan50(item);
+        }
+
+        private void UpdateSellIn(Item item)
+        {
+            var sellInModifier = GetSellInModifier(item);
+            item.SellIn += sellInModifier;
+
+            QualityCanNotBeNegative(item);
+        }
+
+
+        private int GetQualityModifier(Item item)
+        {
+            if (item.IsAgedBrie())
+            {
+                if (item.SellIn == 0)
+                    return 2;
+
+                return 1;
+            }
+
+            if (item.IsSulfuras())
+                return 0;
+
+            if (item.IsBackstagePass())
+            {
+                if(item.SellIn <= 10 && item.SellIn > 5)
+                    return 2;
+
+                if (item.SellIn <= 5 && item.SellIn > 0)
+                    return 3;
+
+                return 1;
+            }
+
+            if (item.IsSellByDatePassed())
+                return -2;
+
+            return -1;
+        }
+
+        private int GetSellInModifier(Item item)
+        {
+            if (item.IsSulfuras())
+                return 0;
+
+            return -1;
+        }
+
+       
+
+        private void QualityCanNotBeNegative(Item item)
+        {
+            item.Quality = Math.Max(item.Quality, 0);
+        }
+
+        private void QualityCanNotBeMoreThan50(Item item)
+        {
+            item.Quality = Math.Min(item.Quality, 50);
         }
     }
 
@@ -148,6 +143,37 @@ namespace GildedRose.Console
         public int SellIn { get; set; }
 
         public int Quality { get; set; }
+    }
+
+    public static class ItemExtensions
+    {
+        public static bool IsSellByDatePassed(this Item item)
+        {
+            return item.SellIn <= 0;
+        }
+
+
+        public static bool IsAgedBrie(this Item item)
+        {
+            return item.Name == KnownItems.AgedBrie;
+        }
+
+        public static bool IsSulfuras(this Item item)
+        {
+            return item.Name == KnownItems.Sulfuras;
+        }
+
+        public static bool IsBackstagePass(this Item item)
+        {
+            return item.Name == KnownItems.BackstagePasses;
+        }
+    }
+
+    public static class KnownItems
+    {
+        public const string AgedBrie = "Aged Brie";
+        public const string Sulfuras = "Sulfuras, Hand of Ragnaros";
+        public const string BackstagePasses = "Backstage passes to a TAFKAL80ETC concert";
     }
 
 }

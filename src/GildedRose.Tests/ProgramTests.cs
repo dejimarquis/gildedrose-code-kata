@@ -194,7 +194,7 @@ namespace GildedRose.Tests
             Program.Run(new List<Item> { item });
 
             // Assert
-            Assert.That(item.Quality, Is.EqualTo(expectedQuality), "Quality does not match for scenario '{0}'",scenarioName);
+            Assert.That(item.Quality, Is.EqualTo(expectedQuality), "Quality does not match for scenario '{0}' with SellIn {1}",scenarioName, sellIn);
         }
     }
 }
