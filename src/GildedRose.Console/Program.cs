@@ -131,7 +131,8 @@ namespace GildedRose.Console
 
         private void QualityCanNotBeMoreThan50(Item item)
         {
-            item.Quality = Math.Min(item.Quality, 50);
+            if(!item.IsSulfuras())
+                item.Quality = Math.Min(item.Quality, 50);
         }
     }
 }

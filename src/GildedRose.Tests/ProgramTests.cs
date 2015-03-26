@@ -26,7 +26,7 @@ namespace GildedRose.Tests
         }
 
         [Test]
-        public void Run_ExistingItems_QualityIsNeverMoreThanFifty()
+        public void Run_ExistingItems_QualityIsNeverMoreThanFiftyExceptForSulfuras()
         {
             // Arrange
 
@@ -38,13 +38,14 @@ namespace GildedRose.Tests
 
             foreach (var item in items)
             {
-                Assert.That(item.Quality, Is.LessThanOrEqualTo(50), "Quality for '{0}' is greater than 50", item.Name);
+                if(!item.IsSulfuras())
+                    Assert.That(item.Quality, Is.LessThanOrEqualTo(50), "Quality for '{0}' is greater than 50", item.Name);
             }
         }
 
         [Test]
         [TestCase("Aged Brie",1)]
-        [TestCase("Sulfuras, Hand of Ragnaros", 50)]
+        [TestCase("Sulfuras, Hand of Ragnaros", 80)]
         [TestCase("+5 Dexterity Vest", 19)]
         [TestCase("Elixir of the Mongoose", 6)]
         [TestCase("Backstage passes to a TAFKAL80ETC concert", 21)]
