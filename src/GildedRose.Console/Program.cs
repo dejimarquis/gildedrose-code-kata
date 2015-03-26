@@ -87,6 +87,11 @@ namespace GildedRose.Console
 
         private int GetQualityModifier(Item item)
         {
+            var conjuredModifier = 1;
+
+            if (item.IsConjured())
+                conjuredModifier = 2;
+
             if (item.IsAgedBrie())
             {
                 if (item.SellIn == 0)
@@ -110,9 +115,9 @@ namespace GildedRose.Console
             }
 
             if (item.IsSellByDatePassed())
-                return -2;
+                return -2*conjuredModifier;
 
-            return -1;
+            return -1*conjuredModifier;
         }
 
         private int GetSellInModifier(Item item)
@@ -166,6 +171,11 @@ namespace GildedRose.Console
         public static bool IsBackstagePass(this Item item)
         {
             return (item.Name ?? "").ToLower().Contains("backstage pass");
+        }
+
+        public static bool IsConjured(this Item item)
+        {
+            return (item.Name ?? "").Trim().ToLower().StartsWith("conjured");
         }
     }
 
