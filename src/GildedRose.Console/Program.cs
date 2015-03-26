@@ -126,7 +126,13 @@ namespace GildedRose.Console
                 }
 
                 QualityCanNotBeMoreThan50(i);
+                QualityCanNotBeLessThanZero(i);
             }  
+        }
+
+        private void QualityCanNotBeLessThanZero(int i)
+        {
+            Items[i].Quality = Math.Max(Items[i].Quality, 0);
         }
 
         private void QualityCanNotBeMoreThan50(int i)
