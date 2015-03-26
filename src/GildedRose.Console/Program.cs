@@ -21,22 +21,23 @@ namespace GildedRose.Console
 
         public static void Run()
         {
+            var items = GetDefaultItems();
+            Run(items);
+        }
+
+        private static List<Item> GetDefaultItems()
+        {
             var items = new List<Item>
             {
                 new Item {Name = "+5 Dexterity Vest", SellIn = 10, Quality = 20},
                 new Item {Name = "Aged Brie", SellIn = 2, Quality = 0},
                 new Item {Name = "Elixir of the Mongoose", SellIn = 5, Quality = 7},
                 new Item {Name = "Sulfuras, Hand of Ragnaros", SellIn = 0, Quality = 80},
-                new Item
-                {
-                    Name = "Backstage passes to a TAFKAL80ETC concert",
-                    SellIn = 15,
-                    Quality = 20
-                },
+                new Item {Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 15,Quality = 20},
                 new Item {Name = "Conjured Mana Cake", SellIn = 3, Quality = 6}
             };
-            
-            Run(items);
+
+            return items;
         }
 
         public static void Run(IList<Item> items)
@@ -61,11 +62,11 @@ namespace GildedRose.Console
 
         private void UpdateItem(Item item)
         {
-            UpdateQuality(item);
-            UpdateSellIn(item);
+            UpdateItemQuality(item);
+            UpdateItemSellIn(item);
         }
 
-        private void UpdateQuality(Item item)
+        private void UpdateItemQuality(Item item)
         {
             var qualityModifier = GetQualityModifier(item);
             item.Quality += qualityModifier;
@@ -74,27 +75,20 @@ namespace GildedRose.Console
                 item.Quality = 0;
 
             QualityCanNotBeMoreThan50(item);
-        }
-
-        private void UpdateSellIn(Item item)
-        {
-            var sellInModifier = GetSellInModifier(item);
-            item.SellIn += sellInModifier;
-
             QualityCanNotBeNegative(item);
         }
 
+        private void UpdateItemSellIn(Item item)
+        {
+            var sellInModifier = GetSellInModifier(item);
+            item.SellIn += sellInModifier;
+        }
 
         private int GetQualityModifier(Item item)
         {
-            var conjuredModifier = 1;
-
-            if (item.IsConjured())
-                conjuredModifier = 2;
-
             if (item.IsAgedBrie())
             {
-                if (item.SellIn == 0)
+                if (item.IsSellByDatePassed())
                     return 2;
 
                 return 1;
@@ -105,19 +99,21 @@ namespace GildedRose.Console
 
             if (item.IsBackstagePass())
             {
-                if(item.SellIn <= 10 && item.SellIn > 5)
+                if(item.SellIn.IsBetween(10,6))
                     return 2;
 
-                if (item.SellIn <= 5 && item.SellIn > 0)
+                if (item.SellIn.IsBetween(5, 1))
                     return 3;
 
                 return 1;
             }
 
-            if (item.IsSellByDatePassed())
-                return -2*conjuredModifier;
+            var isConjuredItem = item.IsConjured();
 
-            return -1*conjuredModifier;
+            if (item.IsSellByDatePassed())
+                return isConjuredItem ? -4:-2;
+
+            return isConjuredItem ? -2:-1;
         }
 
         private int GetSellInModifier(Item item)
@@ -127,8 +123,6 @@ namespace GildedRose.Console
 
             return -1;
         }
-
-       
 
         private void QualityCanNotBeNegative(Item item)
         {
@@ -140,43 +134,4 @@ namespace GildedRose.Console
             item.Quality = Math.Min(item.Quality, 50);
         }
     }
-
-    public class Item
-    {
-        public string Name { get; set; }
-
-        public int SellIn { get; set; }
-
-        public int Quality { get; set; }
-    }
-
-    public static class ItemExtensions
-    {
-        public static bool IsSellByDatePassed(this Item item)
-        {
-            return item.SellIn <= 0;
-        }
-
-
-        public static bool IsAgedBrie(this Item item)
-        {
-            return (item.Name ?? "").ToLower().Contains("aged brie");
-        }
-
-        public static bool IsSulfuras(this Item item)
-        {
-            return (item.Name ?? "").ToLower().Contains("sulfuras");
-        }
-
-        public static bool IsBackstagePass(this Item item)
-        {
-            return (item.Name ?? "").ToLower().Contains("backstage pass");
-        }
-
-        public static bool IsConjured(this Item item)
-        {
-            return (item.Name ?? "").Trim().ToLower().StartsWith("conjured");
-        }
-    }
-
 }
