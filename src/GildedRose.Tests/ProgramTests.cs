@@ -41,6 +41,23 @@ namespace GildedRose.Tests
             }
         }
 
-        
+        [Test]
+        [TestCase("Aged Brie",1)]
+        [TestCase("Sulfuras, Hand of Ragnaros", 80)]
+        [TestCase("+5 Dexterity Vest", 19)]
+        [TestCase("Elixir of the Mongoose", 6)]
+        [TestCase("Backstage passes to a TAFKAL80ETC concert", 21)]
+        [TestCase("Conjured Mana Cake", 5)]
+        public void Main_ItemQualityIsUpdated(string name, int expectedQuality)
+        {
+            // Arrange
+
+            // Act
+            Program.Run();
+
+            // Assert
+            var sulfuras = Program.UpdatedItems.First(i => i.Name == name);
+            Assert.That(sulfuras.Quality,Is.EqualTo(expectedQuality),"Quality for '{0}' is incorrect",name);
+        }
     }
 }
