@@ -48,7 +48,7 @@ namespace GildedRose.Tests
         [TestCase("Elixir of the Mongoose", 6)]
         [TestCase("Backstage passes to a TAFKAL80ETC concert", 21)]
         [TestCase("Conjured Mana Cake", 5)]
-        public void Main_ItemQualityIsUpdated(string name, int expectedQuality)
+        public void Main_Item_QualityIsUpdated(string name, int expectedQuality)
         {
             // Arrange
 
@@ -58,6 +58,25 @@ namespace GildedRose.Tests
             // Assert
             var sulfuras = Program.UpdatedItems.First(i => i.Name == name);
             Assert.That(sulfuras.Quality,Is.EqualTo(expectedQuality),"Quality for '{0}' is incorrect",name);
+        }
+
+        [Test]
+        [TestCase("Aged Brie", 1)]
+        [TestCase("Sulfuras, Hand of Ragnaros", 0)]
+        [TestCase("+5 Dexterity Vest", 9)]
+        [TestCase("Elixir of the Mongoose", 4)]
+        [TestCase("Backstage passes to a TAFKAL80ETC concert", 14)]
+        [TestCase("Conjured Mana Cake", 2)]
+        public void Main_Item_SellInIsDecrementedBy1(string name, int expectedSellIn)
+        {
+            // Arrange
+
+            // Act
+            Program.Run();
+
+            // Assert
+            var sulfuras = Program.UpdatedItems.First(i => i.Name == name);
+            Assert.That(sulfuras.SellIn, Is.EqualTo(expectedSellIn), "SellIn for '{0}' is incorrect", name);
         }
     }
 }
