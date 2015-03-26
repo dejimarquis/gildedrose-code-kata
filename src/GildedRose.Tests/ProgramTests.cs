@@ -56,8 +56,8 @@ namespace GildedRose.Tests
             Program.Run();
 
             // Assert
-            var sulfuras = Program.UpdatedItems.First(i => i.Name == name);
-            Assert.That(sulfuras.Quality,Is.EqualTo(expectedQuality),"Quality for '{0}' is incorrect",name);
+            var item = Program.UpdatedItems.First(i => i.Name == name);
+            Assert.That(item.Quality,Is.EqualTo(expectedQuality),"Quality for '{0}' is incorrect",name);
         }
 
         [Test]
@@ -75,8 +75,8 @@ namespace GildedRose.Tests
             Program.Run();
 
             // Assert
-            var sulfuras = Program.UpdatedItems.First(i => i.Name == name);
-            Assert.That(sulfuras.SellIn, Is.EqualTo(expectedSellIn), "SellIn for '{0}' is incorrect", name);
+            var item = Program.UpdatedItems.First(i => i.Name == name);
+            Assert.That(item.SellIn, Is.EqualTo(expectedSellIn), "SellIn for '{0}' is incorrect", name);
         }
     }
 }
