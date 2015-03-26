@@ -155,25 +155,18 @@ namespace GildedRose.Console
 
         public static bool IsAgedBrie(this Item item)
         {
-            return item.Name == KnownItems.AgedBrie;
+            return (item.Name ?? "").ToLower().Contains("aged brie");
         }
 
         public static bool IsSulfuras(this Item item)
         {
-            return item.Name == KnownItems.Sulfuras;
+            return (item.Name ?? "").ToLower().Contains("sulfuras");
         }
 
         public static bool IsBackstagePass(this Item item)
         {
-            return item.Name == KnownItems.BackstagePasses;
+            return (item.Name ?? "").ToLower().Contains("backstage pass");
         }
-    }
-
-    public static class KnownItems
-    {
-        public const string AgedBrie = "Aged Brie";
-        public const string Sulfuras = "Sulfuras, Hand of Ragnaros";
-        public const string BackstagePasses = "Backstage passes to a TAFKAL80ETC concert";
     }
 
 }
