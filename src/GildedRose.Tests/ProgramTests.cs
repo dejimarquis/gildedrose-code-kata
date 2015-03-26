@@ -8,7 +8,7 @@ namespace GildedRose.Tests
     public class ProgramTests
     {
         [Test]
-        public void Main_QualityIsNeverNegative()
+        public void Run_QualityIsNeverNegative()
         {
             // Arrange
 
@@ -25,7 +25,7 @@ namespace GildedRose.Tests
         }
 
         [Test]
-        public void Main_QualityIsNeverMoreThanFifty()
+        public void Run_QualityIsNeverMoreThanFifty()
         {
             // Arrange
 
@@ -48,7 +48,7 @@ namespace GildedRose.Tests
         [TestCase("Elixir of the Mongoose", 6)]
         [TestCase("Backstage passes to a TAFKAL80ETC concert", 21)]
         [TestCase("Conjured Mana Cake", 5)]
-        public void Main_Item_QualityIsUpdated(string name, int expectedQuality)
+        public void Run_Item_QualityIsUpdated(string name, int expectedQuality)
         {
             // Arrange
 
@@ -67,7 +67,7 @@ namespace GildedRose.Tests
         [TestCase("Elixir of the Mongoose", 4)]
         [TestCase("Backstage passes to a TAFKAL80ETC concert", 14)]
         [TestCase("Conjured Mana Cake", 2)]
-        public void Main_Item_SellInIsDecrementedBy1(string name, int expectedSellIn)
+        public void Run_Item_SellInIsDecrementedBy1(string name, int expectedSellIn)
         {
             // Arrange
 
