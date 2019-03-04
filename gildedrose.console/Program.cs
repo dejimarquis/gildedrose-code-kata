@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace gildedrose.console
 {
-    class Program
+    public class Program
     {
-        IList<Item> Items;
+        public static IList<Item> Items;
         static void Main(string[] args)
         {
             System.Console.WriteLine("OMGHAI!");
 
-            var app = new Program()
-            {
-                Items = new List<Item>
+            var app = new Program();
+
+            Items = new List<Item>
                                           {
                                               new Item {Name = "+5 Dexterity Vest", SellIn = 10, Quality = 20},
                                               new Item {Name = "Aged Brie", SellIn = 2, Quality = 0},
@@ -25,9 +25,7 @@ namespace gildedrose.console
                                                       Quality = 20
                                                   },
                                               new Item {Name = "Conjured Mana Cake", SellIn = 3, Quality = 6}
-                                          }
-
-            };
+                                          };
 
             app.UpdateQuality();
 
@@ -46,6 +44,10 @@ namespace gildedrose.console
                         if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
                         {
                             Items[i].Quality = Items[i].Quality - 1;
+                            if (Items[i].Name == "Conjured")
+                            {
+                                Items[i].Quality = Items[i].Quality - 1;
+                            }
                         }
                     }
                 }
@@ -92,6 +94,11 @@ namespace gildedrose.console
                                 if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
                                 {
                                     Items[i].Quality = Items[i].Quality - 1;
+
+                                    if (Items[i].Name == "Conjured")
+                                    {
+                                        Items[i].Quality = Items[i].Quality - 1;
+                                    }
                                 }
                             }
                         }
